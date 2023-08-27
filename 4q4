@@ -1,0 +1,56 @@
+For this question, calculate the win/loss ratio's correlation with the population of the city it is in for the NFL using 2018 data.
+
+import pandas as pd
+import numpy as np
+import scipy.stats as stats
+import re
+
+nfl_df=pd.read_csv("assets/nfl.csv")
+cities=pd.read_html("assets/wikipedia_data.html")[1]
+cities=cities.iloc[:-1,[0,3,5,6,7,8]]
+def clean_nfl_df():
+    # load data
+    nfl_df=pd.read_csv("assets/nfl.csv")
+    cities=pd.read_html("assets/wikipedia_data.html")[1]
+    cities=cities.iloc[:-1,[0,3,5,6,7,8]]
+
+    # cleaning the cities dataframe
+    cities["NFL"] = cities["NFL"].apply(lambda x: re.sub(r"\[.+\]", "", x))
+    cities["NFL"] = cities["NFL"].replace({"GiantsJets": "Giants,Jets",
+                                           "RamsChargers": "Rams,Chargers",
+                                           "49ersRaiders": "49ers,Raiders"
+                                           })
+    cities["NFL"] = cities["NFL"].apply(lambda x: x.split(","))
+    cities = cities.explode("NFL")
+
+    # cleaning the nhl_df dataframe
+    nfl_df = nfl_df[nfl_df["year"] == 2018]
+    nfl_df["team"] = nfl_df["team"].apply(lambda x: re.sub(r"(\*|\+)", "", x))
+    nfl_df["team"] = nfl_df["team"].apply(lambda x: x.split(" ")[-1])
+
+    # merge the dataframes
+    df = pd.merge(cities, nfl_df, left_on="NFL", right_on="team")
+    df = df[["Metropolitan area", "Population (2016 est.)[8]", "NFL", "team", "W", "L", "W-L%"]]
+    df["Population (2016 est.)[8]"] = df["Population (2016 est.)[8]"].astype("float")
+    df["W-L%"] = df["W-L%"].astype("float")
+
+    # drop duplicated columns
+    df.loc[df["Metropolitan area"] == "New York City", "W-L%"] = 0.2815 # mean of NY W-L%
+    df.loc[df["Metropolitan area"] == "Los Angeles", "W-L%"] = 0.7815 # mean of LA W-L%
+     df.loc[df["Metropolitan area"] == "San Francisco Bay Area", "W-L%"] = 0.25 # mean of SF W-L%
+    df = df.drop_duplicates(subset="Metropolitan area").reset_index()
+    df = df.drop(columns="index")
+    
+    return df
+def nfl_correlation(): 
+    # YOUR CODE HERE
+    df=clean_nfl_df()
+    raise NotImplementedError()
+    
+    population_by_region = [] # pass in metropolitan area population from cities
+    win_loss_by_region = [] # pass in win/loss ratio from nfl_df in the same order as cities["Metropolitan area"]
+
+    assert len(population_by_region) == len(win_loss_by_region), "Q4: Your lists must be the same length"
+    assert len(population_by_region) == 29, "Q4: There should be 29 teams being analysed for NFL"
+
+    return stats.pearsonr(population_by_region, win_loss_by_region)
