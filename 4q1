@@ -1,0 +1,58 @@
+For this question, calculate the win/loss ratio's correlation with the population of the city it is in for the NHL using 2018 data.
+
+import pandas as pd
+import numpy as np
+import scipy.stats as stats
+import re
+
+nhl_df=pd.read_csv("assets/nhl.csv")
+cities=pd.read_html("assets/wikipedia_data.html")[1]
+cities=cities.iloc[:-1,[0,3,5,6,7,8]]
+def clean_nhl_df():
+    # load data
+    nhl_df=pd.read_csv("assets/nhl.csv")
+    cities=pd.read_html("assets/wikipedia_data.html")[1]
+    cities=cities.iloc[:-1,[0,3,5,6,7,8]]
+
+    # cleaning the cities dataframe
+    cities["NHL"] = cities["NHL"].apply(lambda x: re.sub(r"\[.+\]", "", x))
+    cities["NHL"] = cities["NHL"].replace({"RangersIslandersDevils": "Rangers,Islanders,Devils",
+                                           "KingsDucks": "Kings,Ducks",
+                                           "Red Wings": "Red,Wings", 
+                                           "Maple Leafs": "Maple,Leafs", 
+                                           "Blue Jackets": "Blue,Jackets",
+                                           "Golden Knights": "Golden,Knights" })
+    cities["NHL"] = cities["NHL"].apply(lambda x: x.split(","))
+    cities = cities.explode("NHL")
+
+    # cleaning the nhl_df dataframe
+    nhl_df = nhl_df[nhl_df["year"] == 2018]
+    nhl_df["team"] = nhl_df["team"].apply(lambda x: x.replace("*", ""))
+    nhl_df["team"] = nhl_df["team"].apply(lambda x: x.split(" ")[-1])
+
+    # merge the dataframes
+    df = pd.merge(cities, nhl_df, left_on="NHL", right_on="team")
+    df = df[["Metropolitan area", "Population (2016 est.)[8]", "NHL", "team", "W", "L"]]
+    df["W-L%"] = df["W"].astype("int")/(df["W"].astype("int") + df["L"].astype("int"))
+    df["Population (2016 est.)[8]"] = df["Population (2016 est.)[8]"].astype("float")
+    df["W-L%"] = df["W-L%"].astype("float")
+
+    # drop duplicated columns
+    df.loc[df["Metropolitan area"] == "New York City", "W-L%"] = 0.5182013333333334 # mean of NY W-L%
+    df.loc[df["Metropolitan area"] == "Los Angeles", "W-L%"] = 0.6228945 # mean of LA W-L%
+    df = df.drop_duplicates(subset="Metropolitan area").reset_index()
+    df = df.drop(columns="index")
+    
+    return df
+def nhl_correlation(): 
+    # YOUR CODE HERE
+    #raise NotImplementedError()
+    df=clean_nh1_df()
+    
+    population_by_region = [] # pass in metropolitan area population from cities
+    win_loss_by_region = [] # pass in win/loss ratio from nhl_df in the same order as cities["Metropolitan area"]
+
+    assert len(population_by_region) == len(win_loss_by_region), "Q1: Your lists must be the same length"
+    assert len(population_by_region) == 28, "Q1: There should be 28 teams being analysed for NHL"
+    
+    return stats.pearsonr(population_by_region, win_loss_by_region)
