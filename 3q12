@@ -1,0 +1,28 @@
+Cut % Renewable into 5 bins. Group Top15 by the Continent, as well as these new % Renewable bins. How many countries are in each of these groups?
+
+This function should return a Series with a MultiIndex of Continent, then the bins for % Renewable. Do not include groups with no countries.
+
+def answer_twelve():
+    # YOUR CODE HERE
+    Top15 = answer_one()
+    ContinentDict  = {'China':'Asia', 
+                  'United States':'North America', 
+                  'Japan':'Asia', 
+                  'United Kingdom':'Europe', 
+                  'Russian Federation':'Europe', 
+                  'Canada':'North America', 
+                  'Germany':'Europe', 
+                  'India':'Asia',
+                  'France':'Europe', 
+                  'South Korea':'Asia', 
+                  'Italy':'Europe', 
+                  'Spain':'Europe', 
+                  'Iran':'Asia',
+                  'Australia':'Australia', 
+                  'Brazil':'South America'}
+    Top15["bins"] = pd.cut(Top15["% Renewable"], 5)
+    
+    return Top15.groupby([ContinentDict, Top15['bins']]).size()
+answer_twelve()
+    raise NotImplementedError()
+​
