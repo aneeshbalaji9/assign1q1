@@ -1,0 +1,49 @@
+Let's explore the relationship between being fed breastmilk as a child and getting a seasonal influenza vaccine from a healthcare provider. Return a tuple of the average number of influenza vaccines for those children we know received breastmilk as a child and those who know did not.
+
+This function should return a tuple in the form (use the correct numbers:
+
+(2.5, 0.1)
+
+
+
+def average_influenza_doses():
+    # YOUR CODE HERE
+    
+    received_breastmilk_count = 0
+    did_not_receive_breastmilk_count = 0
+    
+    # Initialize sum of influenza vaccine doses for each group
+    sum_received_breastmilk_doses = 0
+    sum_did_not_receive_breastmilk_doses = 0
+    
+    # Iterate through the dataset to calculate counts and sum of doses
+    for record in data:
+        received_breastmilk = record["received_breastmilk"]
+        influenza_doses = record["influenza_doses"]
+        
+        if received_breastmilk:
+            received_breastmilk_count += 1
+            sum_received_breastmilk_doses += influenza_doses
+        else:
+            did_not_receive_breastmilk_count += 1
+            sum_did_not_receive_breastmilk_doses += influenza_doses
+    
+    # Calculate the average number of influenza doses for each group
+    avg_received_breastmilk_doses = sum_received_breastmilk_doses / received_breastmilk_count
+    avg_did_not_receive_breastmilk_doses = sum_did_not_receive_breastmilk_doses / did_not_receive_breastmilk_count
+    
+    # Return the results as a tuple
+    return (avg_received_breastmilk_doses, avg_did_not_receive_breastmilk_doses)
+​
+# Sample dataset (replace this with your actual dataset)
+data = [
+    {"received_breastmilk": True, "influenza_doses": 3},
+    {"received_breastmilk": False, "influenza_doses": 0},
+    {"received_breastmilk": True, "influenza_doses": 2},
+    # Add more data records here
+]
+​
+# Call the function with the sample data
+result = average_influenza_doses(data)
+print(result)
+    raise NotImplementedError()
