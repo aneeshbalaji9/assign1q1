@@ -1,0 +1,15 @@
+By how much had the GDP changed over the 10 year span for the country with the 6th largest average GDP?
+
+This function should return a single number.
+
+
+def answer_four():
+    # YOUR CODE HERE
+    Top15 = answer_one()
+    Top15["AvgGDP"] = answer_three()
+    Top15.sort_values("AvgGDP", ascending=False, inplace=True)
+    final = Top15.iloc[5]['2015']
+    initial = Top15.iloc[5]['2006']
+    return abs(final - initial)
+answer_four()
+    raise NotImplementedError()
