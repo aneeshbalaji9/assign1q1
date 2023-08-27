@@ -1,0 +1,48 @@
+For this question, calculate the win/loss ratio's correlation with the population of the city it is in for the NBA using 2018 data.
+
+import pandas as pd
+import numpy as np
+import scipy.stats as stats
+import re
+
+nba_df=pd.read_csv("assets/nba.csv")
+cities=pd.read_html("assets/wikipedia_data.html")[1]
+cities=cities.iloc[:-1,[0,3,5,6,7,8]]
+# cleaning the cities dataframe
+    cities["NBA"] = cities["NBA"].apply(lambda x: re.sub(r"\[.+\]", "", x))
+    cities["NBA"] = cities["NBA"].replace({"KnicksNets": "Knicks,Nets",
+                                           "LakersClippers": "Lakers,Clippers",
+                                           "Trail Blazers": "Trail,Blazers"})
+    cities["NBA"] = cities["NBA"].apply(lambda x: x.split(","))
+    cities = cities.explode("NBA")
+
+    # cleaning the nhl_df dataframe
+    nba_df = nba_df[nba_df["year"] == 2018]
+    nba_df["team"] = nba_df["team"].apply(lambda x: re.sub(r"(\)\s\(\d+\)", "", x))
+    nba_df["team"] = nba_df["team"].apply(lambda x: x.split(" ")[-1])
+
+    # merge the dataframes
+    df = pd.merge(cities, nba_df, left_on="NBA", right_on="team")
+    df = df.rename(columns={"W/L%": "W-L%"})
+    df = df[["Metropolitan area", "Population (2016 est.)[8]", "NBA", "team", "W", "L", "W-L%"]]
+    df["Population (2016 est.)[8]"] = df["Population (2016 est.)[8]"].astype("float")
+    df["W-L%"] = df["W-L%"].astype("float")
+    
+    # drop duplicated columns
+    df.loc[df["Metropolitan area"] == "New York City", "W-L%"] = 0.34750000000000003 # mean of NY W-L%
+    df.loc[df["Metropolitan area"] == "Los Angeles", "W-L%"] = 0.46950000000000003 # mean of LA W-L%
+    df = df.drop_duplicates(subset="Metropolitan area").reset_index()
+    df = df.drop(columns="index")
+    
+    return df
+def nba_correlation():
+    # YOUR CODE HERE
+    raise NotImplementedError()
+    df=clean_nba_df()
+    population_by_region = [] # pass in metropolitan area population from cities
+    win_loss_by_region = [] # pass in win/loss ratio from nba_df in the same order as cities["Metropolitan area"]
+
+    assert len(population_by_region) == len(win_loss_by_region), "Q2: Your lists must be the same length"
+    assert len(population_by_region) == 28, "Q2: There should be 28 teams being analysed for NBA"
+
+    return stats.pearsonr(population_by_region, win_loss_by_region)
