@@ -1,0 +1,44 @@
+Use the following dictionary to group the Countries by Continent, then create a DataFrame that displays the sample size (the number of countries in each continent bin), and the sum, mean, and std deviation for the estimated population of each country.
+
+ContinentDict  = {'China':'Asia', 
+                  'United States':'North America', 
+                  'Japan':'Asia', 
+                  'United Kingdom':'Europe', 
+                  'Russian Federation':'Europe', 
+                  'Canada':'North America', 
+                  'Germany':'Europe', 
+                  'India':'Asia',
+                  'France':'Europe', 
+                  'South Korea':'Asia', 
+                  'Italy':'Europe', 
+                  'Spain':'Europe', 
+                  'Iran':'Asia',
+                  'Australia':'Australia', 
+                  'Brazil':'South America'}
+This function should return a DataFrame with index named Continent ['Asia', 'Australia', 'Europe', 'North America', 'South America'] and columns ['size', 'sum', 'mean', 'std']
+
+def answer_eleven():
+    # YOUR CODE HERE
+    Top15 = answer_one()
+    ContinentDict  = {'China':'Asia', 
+                  'United States':'North America', 
+                  'Japan':'Asia', 
+                  'United Kingdom':'Europe', 
+                  'Russian Federation':'Europe', 
+                  'Canada':'North America', 
+                  'Germany':'Europe', 
+                  'India':'Asia',
+                  'France':'Europe', 
+                  'South Korea':'Asia', 
+                  'Italy':'Europe', 
+                  'Spain':'Europe', 
+                  'Iran':'Asia',
+                  'Australia':'Australia', 
+                  'Brazil':'South America'}
+    groups = pd.DataFrame(columns = ['size', 'sum', 'mean', 'std'])
+    Top15['Estimate Population'] = Top15['Energy Supply'] / Top15['Energy Supply per Capita']
+    for group, frame in Top15.groupby(ContinentDict):
+        groups.loc[group] = [len(frame), frame['Estimate Population'].sum(),frame['Estimate Population'].mean(),frame['Estimate Population'].std()]
+    return groups
+answer_eleven()
+    raise NotImplementedError()
