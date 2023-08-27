@@ -1,0 +1,13 @@
+Create a new column with a 1 if the country's % Renewable value is at or above the median for all countries in the top 15, and a 0 if the country's % Renewable value is below the median.
+
+This function should return a series named HighRenew whose index is the country name sorted in ascending order of rank.
+
+def answer_ten():
+    # YOUR CODE HERE
+    Top15 = answer_one()
+    reference = Top15["% Renewable"].median(axis=0)
+    Top15["HighRenew"] = Top15.apply(lambda x: 1 if x["% Renewable"] > reference else 0, axis=1)
+    Top15.sort_values(by='Rank', inplace=True)
+    return Top15["HighRenew"] 
+answer_ten()
+    raise NotImplementedError()
