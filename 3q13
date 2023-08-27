@@ -1,0 +1,15 @@
+Convert the Population Estimate series to a string with thousands separator (using commas). Use all significant digits (do not round the results).
+
+e.g. 12345678.90 -> 12,345,678.90
+
+This function should return a series PopEst whose index is the country name and whose values are the population estimate string
+
+def answer_thirteen():
+    # YOUR CODE HERE
+    Top15 = answer_one()
+    Top15["Population"] = Top15['Energy Supply'] / Top15['Energy Supply per Capita']
+    #Top15["Population"] = Top15["Population"]
+    
+    return Top15['Population'].apply(lambda x: '{0:,}'.format(x))
+answer_thirteen()
+    raise NotImplementedError()
