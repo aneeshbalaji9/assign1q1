@@ -1,0 +1,39 @@
+It would be interesting to see if there is any evidence of a link between vaccine effectiveness and sex of the child. Calculate the ratio of the number of children who contracted chickenpox but were vaccinated against it (at least one varicella dose) versus those who were vaccinated but did not contract chicken pox. Return results by sex.
+
+This function should return a dictionary in the form of (use the correct numbers):
+
+    {"male":0.2,
+    "female":0.4}
+Note: To aid in verification, the chickenpox_by_sex()['female'] value the autograder is looking for starts with the digits 0.0077.
+
+
+
+
+def chickenpox_by_sex():
+    # YOUR CODE HERE
+    male_count = 0
+    female_count = 0
+    
+    # Initialize counters for male and female children who contracted chickenpox and were vaccinated
+    male_vaccinated_chickenpox_count = 0
+    female_vaccinated_chickenpox_count = 0
+    
+    # Iterate through the dataset to calculate counts
+    for record in data:
+        sex = record["sex"]
+        vaccinated = record["vaccinated"]
+        contracted_chickenpox = record["contracted_chickenpox"]
+        
+        if sex == "male":
+            male_count += 1
+            if vaccinated and contracted_chickenpox:
+                male_vaccinated_chickenpox_count += 1
+        elif sex == "female":
+            female_count += 1
+            if vaccinated and contracted_chickenpox:
+                female_vaccinated_chickenpox_count += 1
+    
+    # Calculate the ratios
+    ratio_male = male_vaccinated_chickenpox_count / male_count
+    ratio_female = female_vaccinated_chickenpox_count / female_count
+    raise NotImplementedError()
