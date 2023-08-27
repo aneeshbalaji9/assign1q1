@@ -1,0 +1,12 @@
+Create a column that estimates the population using Energy Supply and Energy Supply per capita. What is the third most populous country according to this estimate?
+
+This function should return the name of the country
+
+def answer_eight():
+    # YOUR CODE HERE
+    Top15 = answer_one()
+    Top15["Population"] = Top15['Energy Supply'] / Top15['Energy Supply per Capita']
+    final = Top15.sort_values("Population", ascending=False)
+    return final.iloc[2].name
+answer_eight()
+    raise NotImplementedError()
