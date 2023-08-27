@@ -1,0 +1,58 @@
+Write a function called proportion_of_education which returns the proportion of children in the dataset who had a mother with the education levels equal to less than high school (<12), high school (12), more than high school but not a college graduate (>12) and college degree.
+
+This function should return a dictionary in the form of (use the correct numbers, do not round numbers):
+
+    {"less than high school":0.2,
+    "high school":0.4,
+    "more than high school but not college":0.2,
+    "college":0.2}
+
+
+    
+def proportion_of_education():
+    # your code goes here
+    # YOUR CODE HERE
+    less_than_high_school = 0
+    high_school = 0
+    more_than_high_school = 0
+    college_degree = 0
+    
+    total_children = len(data)
+    
+    # Iterate through the dataset to count each education level
+    for record in data:
+        mother_education = record["mother_education"]
+        if mother_education < 12:
+            less_than_high_school += 1
+        elif mother_education == 12:
+            high_school += 1
+        elif mother_education > 12 and mother_education < 16:
+            more_than_high_school += 1
+        elif mother_education >= 16:
+            college_degree += 1
+    
+    # Calculate proportions
+    proportion_less_than_high_school = less_than_high_school / total_children
+    proportion_high_school = high_school / total_children
+    proportion_more_than_high_school = more_than_high_school / total_children
+    proportion_college_degree = college_degree / total_children
+    
+    # Create and return the dictionary
+    education_proportions = {
+        "less than high school": proportion_less_than_high_school,
+        "high school": proportion_high_school,
+        "more than high school but not college": proportion_more_than_high_school,
+        "college": proportion_college_degree
+    }
+    
+    return education_proportions
+​
+# Sample dataset (replace this with your actual dataset)
+data = [
+    {"mother_education": 10},
+    {"mother_education": 12},
+    {"mother_education": 14},
+    {"mother_education": 16},
+    {"mother_education": 10},
+    {"mother_education": 14}]
+    raise NotImplementedError()
